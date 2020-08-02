@@ -1,0 +1,8 @@
+.gcp_creds.json
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
