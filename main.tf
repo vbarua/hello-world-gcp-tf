@@ -83,5 +83,64 @@ module "mig" {
     request_path        = var.container_healthcheck
     host                = ""
   }
+}
 
+# Create a Load Balancer targetting the Managed Instance Group
+# ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+module "http-lb" {
+  source  = "GoogleCloudPlatform/lb-http/google"
+  version = "~> 4.2.0"
+
+  project = var.project_id
+  name    = "${var.name_prefix}-lb"
+  firewall_networks = [
+    google_compute_network.default.self_link
+  ]
+  target_tags = [var.http_server_tag]
+
+  backends = {
+    default = {
+      description                     = null
+      protocol                        = "HTTP"
+      port                            = var.container_port
+      port_name                       = "hello-world"
+      timeout_sec                     = 10
+      connection_draining_timeout_sec = null
+      enable_cdn                      = false
+      session_affinity                = null
+      affinity_cookie_ttl_sec         = null
+
+      health_check = {
+        check_interval_sec  = null
+        timeout_sec         = null
+        healthy_threshold   = null
+        unhealthy_threshold = null
+        request_path        = var.container_healthcheck
+        port                = var.container_port
+        host                = null
+        logging             = true
+      }
+
+      log_config = {
+        enable      = true
+        sample_rate = 1.0
+      }
+
+      groups = [
+        {
+          group                        = module.mig.instance_group
+          balancing_mode               = null
+          capacity_scaler              = null
+          description                  = null
+          max_connections              = null
+          max_connections_per_instance = null
+          max_connections_per_endpoint = null
+          max_rate                     = null
+          max_rate_per_instance        = null
+          max_rate_per_endpoint        = null
+          max_utilization              = null
+        }
+      ]
+    }
+  }
 }
