@@ -43,7 +43,8 @@ module "mig_template" {
   source_image         = reverse(split("/", module.gce_container.source_image))[0]
   metadata = map(
     # Container metadata is used here
-    "gce-container-declaration", module.gce_container.metadata_value
+    "gce-container-declaration", module.gce_container.metadata_value,
+    "google-logging-enabled", "true"
   )
   tags = [var.http_server_tag]
   labels = {
