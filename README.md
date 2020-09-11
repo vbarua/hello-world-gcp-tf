@@ -5,12 +5,15 @@
 | terraform | ~> 0.12.29 |
 | google | ~> 3.32.0 |
 | google-beta | ~> 3.32.0 |
+| null | ~> 2.1.2 |
+| random | ~> 2.3.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | google | ~> 3.32.0 |
+| random | ~> 2.3.0 |
 
 ## Inputs
 
@@ -22,6 +25,11 @@
 | container\_registry\_region | The GCR region for the container registry | `string` | `"us"` | no |
 | container\_tag | Container tag to deploy | `string` | n/a | yes |
 | cos\_image\_name | Pinned ContainerOS image to use instead of latest | `string` | `"cos-stable-77-12371-89-0"` | no |
+| db\_instance\_name | The SQL Database instance name | `string` | n/a | yes |
+| db\_name | Name of the default database | `string` | n/a | yes |
+| db\_password | Database password | `string` | n/a | yes |
+| db\_user | Name of the database user | `string` | n/a | yes |
+| db\_zone | Zone (eg. a, b, ...) for the primary db instance | `string` | n/a | yes |
 | http\_server\_tag | Tag for allowing http traffic | `string` | `"http-server"` | no |
 | mig\_instance\_count | The number of instances to place in the managed instance group | `string` | `"2"` | no |
 | mig\_service\_account | Service account to attach to the managed instance group | <pre>object({<br>    email  = string,<br>    scopes = list(string)<br>  })</pre> | <pre>{<br>  "email": "",<br>  "scopes": [<br>    "cloud-platform"<br>  ]<br>}</pre> | no |

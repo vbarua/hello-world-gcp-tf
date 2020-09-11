@@ -41,6 +41,33 @@ variable "http_server_tag" {
   default     = "http-server"
 }
 
+# Database Configuration
+# ---- ---- ---- ---- ----
+variable "db_zone" {
+  type        = string
+  description = "Zone (eg. a, b, ...) for the primary db instance"
+}
+
+variable "db_instance_name" {
+  type        = string
+  description = "The SQL Database instance name"
+}
+
+variable "db_name" {
+  type        = string
+  description = "Name of the default database"
+}
+
+variable "db_user" {
+  type        = string
+  description = "Name of the database user"
+}
+
+variable "db_password" {
+  type        = string
+  description = "Database password"
+}
+
 # Container Settings
 # ---- ---- ---- ----
 variable "container_registry_region" {

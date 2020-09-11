@@ -21,7 +21,24 @@ module "gce_container" {
 
   container = {
     image = data.google_container_registry_image.app-image.image_url
-    env   = []
+    env = [
+      {
+        name  = "SQL_HOST",
+        value = module.sql_db.private_ip_address
+      },
+      {
+        name  = "SQL_USERNAME",
+        value = var.db_user
+      },
+      {
+        name  = "SQL_PASSWORD"
+        value = var.db_password
+      },
+      {
+        name  = "SQL_DBNAME"
+        value = var.db_name
+      },
+    ]
   }
 
   restart_policy = "Always"
@@ -33,8 +50,8 @@ module "mig_template" {
   source  = "terraform-google-modules/vm/google//modules/instance_template"
   version = "4.0.0"
 
-  network    = google_compute_network.default.self_link
-  subnetwork = google_compute_subnetwork.default.self_link
+  network    = google_compute_network.hello_world.self_link
+  subnetwork = google_compute_subnetwork.hello_world.self_link
 
   service_account      = var.mig_service_account
   name_prefix          = var.name_prefix
@@ -56,8 +73,8 @@ module "mig" {
   source  = "terraform-google-modules/vm/google//modules/mig"
   version = "~> 4.0.0"
 
-  network    = google_compute_network.default.self_link
-  subnetwork = google_compute_subnetwork.default.self_link
+  network    = google_compute_network.hello_world.self_link
+  subnetwork = google_compute_subnetwork.hello_world.self_link
   region     = var.region
 
   instance_template = module.mig_template.self_link
@@ -95,7 +112,7 @@ module "http-lb" {
   project = var.project_id
   name    = "${var.name_prefix}-lb"
   firewall_networks = [
-    google_compute_network.default.self_link
+    google_compute_network.hello_world.self_link
   ]
   target_tags = [var.http_server_tag]
 
